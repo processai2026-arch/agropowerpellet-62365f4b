@@ -20,12 +20,12 @@ const HeroSection = () => {
           India's Trusted Biomass Supply Chain Partner
         </span>
 
-        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6" style={{ color: 'hsl(0 0% 100%)' }}>
+        <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4 sm:mb-6" style={{ color: 'hsl(0 0% 100%)' }}>
           Turning Agricultural Waste into{" "}
           <span className="text-gradient-eco">Industrial Energy</span>
         </h1>
 
-        <p className="text-lg md:text-xl max-w-2xl mx-auto mb-10 font-medium" style={{ color: 'hsl(0 0% 85%)' }}>
+        <p className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 font-medium px-2" style={{ color: 'hsl(0 0% 85%)' }}>
           Smart supply chains. Sustainable energy. We help industries reduce
           fuel costs and increase profitability with reliable biomass solutions.
         </p>
@@ -43,12 +43,12 @@ const HeroSection = () => {
               className="gap-2 text-base px-8 py-6 rounded-xl border-primary/40 hover:bg-primary/10"
               style={{ color: 'hsl(0 0% 95%)' }}
             >
-              <Phone className="h-5 w-5" /> Call +91 9940099060
+              <Phone className="h-5 w-5" /> <span className="hidden sm:inline">Call </span>+91 9940099060
             </Button>
           </a>
         </div>
 
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mt-10 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {[
             { value: "500+", label: "Tons/Month Supplied" },
             { value: "30%", label: "Avg. Cost Savings" },
@@ -56,7 +56,7 @@ const HeroSection = () => {
             { value: "100%", label: "Sustainable Fuel" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="text-3xl md:text-4xl font-display font-bold text-gradient-eco">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-gradient-eco">
                 {stat.value}
               </div>
               <div className="text-sm mt-1" style={{ color: 'hsl(0 0% 70%)' }}>
