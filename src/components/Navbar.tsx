@@ -73,7 +73,7 @@ const Navbar = () => {
 
       {/* Mobile menu overlay */}
       <div
-        className={`lg:hidden fixed inset-0 top-14 bg-background/98 backdrop-blur-md transition-all duration-300 ${
+        className={`lg:hidden fixed inset-0 top-14 bg-background transition-all duration-300 z-50 ${
           open ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         }`}
       >
