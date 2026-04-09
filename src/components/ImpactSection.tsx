@@ -37,7 +37,7 @@ const ImpactSection = () => {
                 backgroundColor: 'hsl(0 0% 100% / 0.05)',
               }}
             >
-              <div className="text-4xl md:text-5xl font-display font-bold text-gradient-eco mb-2">
+              <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-gradient-eco mb-2">
                 {s.value}
               </div>
               <div className="font-semibold text-sm" style={{ color: 'hsl(0 0% 90%)' }}>
