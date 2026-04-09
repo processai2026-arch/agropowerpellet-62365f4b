@@ -72,10 +72,9 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu overlay */}
+      {open && (
       <div
-        className={`lg:hidden fixed inset-0 top-14 bg-background transition-all duration-300 z-50 ${
-          open ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
-        }`}
+        className="lg:hidden fixed inset-0 top-14 bg-background z-50"
       >
         <div className="container mx-auto px-4 py-6 flex flex-col h-full">
           <div className="space-y-1">
@@ -104,7 +103,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </nav>
+      )}
   );
 };
 
