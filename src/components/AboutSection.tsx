@@ -1,6 +1,6 @@
 import { Truck, Link, BarChart3, Shield } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeLeft, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
+import { blurFocus, blurFocusContainer, viewportOnce } from "@/lib/motion";
 
 const features = [
   {
@@ -34,7 +34,7 @@ const AboutSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          variants={fadeLeft}
+          variants={blurFocus}
         >
           <span className="text-sm font-semibold uppercase tracking-wider text-primary">
             About Us
@@ -55,12 +55,12 @@ const AboutSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          variants={staggerContainer}
+          variants={blurFocusContainer}
         >
           {features.map((f) => (
             <motion.div
               key={f.title}
-              variants={cardItem}
+              variants={blurFocus}
               whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
               className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-colors hover:shadow-lg group"
             >

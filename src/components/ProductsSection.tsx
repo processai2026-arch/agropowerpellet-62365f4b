@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
+import { fadeUp, staggerContainer, parallaxCard, parallaxImage, viewportOnce } from "@/lib/motion";
 import sawDust from "@/assets/products/saw-dust.jpg";
 import coffeeHusk from "@/assets/products/coffee-husk.jpg";
 import riceHusk from "@/assets/products/rice-husk.jpg";
@@ -55,18 +55,19 @@ const ProductsSection = () => {
           {products.map((p) => (
             <motion.div
               key={p.name}
-              variants={cardItem}
-              whileHover={{ y: -10, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } }}
+              variants={parallaxCard}
+              whileHover={{ y: -10, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
               className="bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/40 shadow-sm hover:shadow-2xl transition-[box-shadow,border-color] duration-300 group cursor-pointer"
             >
               <div className="aspect-square overflow-hidden bg-muted/50">
-                <img
+                <motion.img
+                  variants={parallaxImage}
                   src={p.img}
                   alt={`${p.name} - biomass fuel product`}
                   loading="lazy"
                   width={1024}
                   height={1024}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover will-change-transform group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="p-6">
