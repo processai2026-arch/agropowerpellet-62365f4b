@@ -1,4 +1,6 @@
 import { Star, Quote } from "lucide-react";
+import { motion } from "framer-motion";
+import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
 
 const testimonials = [
   {
@@ -23,22 +25,36 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-muted">
+    <section className="py-20 md:py-28 bg-muted overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeUp}
+        >
           <span className="text-sm font-semibold uppercase tracking-wider text-primary">
             Client Success Stories
           </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mt-3 text-foreground">
             Trusted by Industry Leaders
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <motion.div
+          className="grid md:grid-cols-3 gap-6"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+        >
           {testimonials.map((t) => (
-            <div
+            <motion.div
               key={t.name}
-              className="bg-card rounded-2xl p-8 border border-border relative"
+              variants={cardItem}
+              whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
+              className="bg-card rounded-2xl p-8 border border-border relative hover:border-primary/40 transition-colors"
             >
               <Quote className="absolute top-6 right-6 h-8 w-8 text-primary/15" />
               <div className="flex gap-1 mb-4">
@@ -51,9 +67,9 @@ const TestimonialsSection = () => {
                 <div className="font-semibold text-card-foreground">{t.name}</div>
                 <div className="text-sm text-muted-foreground">{t.role}</div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
