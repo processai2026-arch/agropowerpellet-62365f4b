@@ -82,11 +82,6 @@ export const blurFocusContainer: Variants = {
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
 };
 
-export const blurFocusContainer: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
-};
-
 // 3. Solutions card slide-from-left + corner shape subtle scale
 export const solutionCard: Variants = {
   hidden: { opacity: 0, x: -30 },
