@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import FloatingPellets from "@/components/FloatingPellets";
 import HeroSection from "@/components/HeroSection";
 import SplittingPellet from "@/components/SplittingPellet";
 import AboutSection from "@/components/AboutSection";
@@ -15,7 +14,6 @@ import Footer from "@/components/Footer";
 const Index = () => {
   return (
     <div className="min-h-screen relative">
-      <FloatingPellets />
       <Navbar />
       <HeroSection />
       <SplittingPellet />
