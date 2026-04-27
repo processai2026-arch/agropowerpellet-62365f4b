@@ -72,7 +72,7 @@ const SplittingPellet = () => {
         </div>
 
         <motion.div
-          style={{ opacity: headlineOpacity, y: headlineY, ease: easeSoft }}
+          style={{ opacity: headlineOpacity, y: headlineY }}
           className="absolute inset-x-0 bottom-16 md:bottom-24 text-center px-4"
         >
           <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-primary">
