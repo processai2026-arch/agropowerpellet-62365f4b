@@ -2,38 +2,58 @@ import { useEffect, useMemo, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 /**
- * Global ambient floating pellet background.
- * - Fixed full-viewport layer behind all content (z-index: 0, pointer-events: none)
- * - Density scales with scroll progress (more pellets as user scrolls down)
- * - Pellets drift slowly upward / diagonally with gentle rotation
- * - Mobile: pellet count is halved for performance
+ * Global ambient FALLING pellet background.
+ * - Fixed full-viewport layer behind content (z-index: 1, pointer-events: none)
+ * - Pellets fall from above the viewport to below, with a gentle horizontal sway
+ * - Density scales with scroll progress (15 → 65 pellets desktop, capped at 20 on mobile)
+ * - CSS keyframes only (no JS-driven motion), GPU-accelerated via transform
  */
 
 type Pellet = {
   id: number;
   leftPct: number;       // 0-100
-  topPct: number;        // 0-100 starting position
-  size: number;          // px
+  width: number;         // px
+  height: number;        // px
   rotate: number;        // deg
-  duration: number;      // s
-  delay: number;         // s
-  driftX: number;        // px horizontal drift
-  driftY: number;        // px vertical drift (negative = up)
-  opacity: number;       // target opacity
+  duration: number;      // s (fall cycle)
+  delay: number;         // s (negative so mid-cycle on mount)
+  swayVariant: number;   // 0-3 → which sway keyframe
+  opacity: number;       // 0.35 - 0.55
+  color: string;         // gradient mid color
+  colorDark: string;     // gradient edge color
 };
 
-const MAX_DESKTOP = 40;
+const MAX_DESKTOP = 65;
 const MAX_MOBILE = 20;
 
-// Seeded-ish random for stable pellet positions across renders
 const rand = (seed: number) => {
   const x = Math.sin(seed * 9301 + 49297) * 233280;
   return x - Math.floor(x);
 };
 
-const buildPellets = (count: number): Pellet[] => {
-  const sizes = [16, 20, 24, 28, 32, 36];
-  const angles = [0, 30, 45, 60, 90, 120, 150];
+// Color palette: 60% warm brown, 25% dark amber, 15% light tan
+const pickColor = (r: number): { mid: string; dark: string } => {
+  if (r < 0.6) return { mid: "#8B5E3C", dark: "#5d3d23" };
+  if (r < 0.85) return { mid: "#6B4423", dark: "#3f2812" };
+  return { mid: "#C4956A", dark: "#8a6440" };
+};
+
+const buildPellets = (count: number, mobile: boolean): Pellet[] => {
+  // Sizes: width x height. Mobile uses only the two smaller sizes.
+  const sizes = mobile
+    ? [
+        { w: 8, h: 18 },
+        { w: 12, h: 28 },
+      ]
+    : [
+        { w: 8, h: 18 },
+        { w: 8, h: 18 },
+        { w: 8, h: 18 },
+        { w: 12, h: 28 },
+        { w: 12, h: 28 },
+        { w: 16, h: 38 },
+      ];
+
   return Array.from({ length: count }).map((_, i) => {
     const r1 = rand(i + 1);
     const r2 = rand(i + 2);
@@ -41,18 +61,21 @@ const buildPellets = (count: number): Pellet[] => {
     const r4 = rand(i + 4);
     const r5 = rand(i + 5);
     const r6 = rand(i + 6);
-    const horizontalDir = r5 > 0.66 ? 0 : r5 > 0.33 ? 1 : -1; // straight up / right / left
+    const r7 = rand(i + 7);
+    const size = sizes[Math.floor(r3 * sizes.length)];
+    const { mid, dark } = pickColor(r7);
     return {
       id: i,
       leftPct: r1 * 100,
-      topPct: r2 * 100,
-      size: sizes[Math.floor(r3 * sizes.length)],
-      rotate: angles[Math.floor(r4 * angles.length)],
-      duration: 22 + r5 * 18,         // 22s - 40s
-      delay: -r6 * 25,                 // negative so they're mid-cycle on mount
-      driftX: horizontalDir * (20 + r3 * 40),
-      driftY: -(60 + r4 * 80),         // always drift upward overall
-      opacity: 0.06 + r6 * 0.06,       // 0.06 - 0.12
+      width: size.w,
+      height: size.h,
+      rotate: Math.round((r4 * 2 - 1) * 60),  // -60° to +60°
+      duration: 8 + r2 * 7,                   // 8s - 15s
+      delay: -r5 * 15,                        // negative so mid-cycle
+      swayVariant: Math.floor(r6 * 4),
+      opacity: 0.35 + r5 * 0.2,               // 0.35 - 0.55
+      color: mid,
+      colorDark: dark,
     };
   });
 };
@@ -61,25 +84,25 @@ const FloatingPellets = () => {
   const isMobile = useIsMobile();
   const max = isMobile ? MAX_MOBILE : MAX_DESKTOP;
 
-  const pellets = useMemo(() => buildPellets(max), [max]);
+  const pellets = useMemo(() => buildPellets(max, isMobile), [max, isMobile]);
 
-  const [visibleCount, setVisibleCount] = useState(
-    Math.round(max * 0.18) // start with ~6/40 or ~3/20
-  );
+  const [visibleCount, setVisibleCount] = useState(Math.round(max * 0.25));
 
   useEffect(() => {
     const compute = () => {
       const doc = document.documentElement;
       const scrollable = doc.scrollHeight - window.innerHeight;
       const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
-      // 0-20%: 6, 20-40%: 12, 40-60%: 20, 60-80%: 28, 80-100%: 38 (on desktop max=40)
-      let target: number;
-      if (progress < 0.2) target = Math.round(max * 0.15);
-      else if (progress < 0.4) target = Math.round(max * 0.3);
-      else if (progress < 0.6) target = Math.round(max * 0.5);
-      else if (progress < 0.8) target = Math.round(max * 0.7);
-      else target = Math.round(max * 0.95);
-      setVisibleCount(target);
+      // 0%: 15, 25%: 25, 50%: 35, 75%: 50, 100%: 65 (desktop). Mobile scales to max=20.
+      const ratio =
+        progress < 0.25
+          ? 0.23 + (progress / 0.25) * (0.38 - 0.23)
+          : progress < 0.5
+          ? 0.38 + ((progress - 0.25) / 0.25) * (0.54 - 0.38)
+          : progress < 0.75
+          ? 0.54 + ((progress - 0.5) / 0.25) * (0.77 - 0.54)
+          : 0.77 + ((progress - 0.75) / 0.25) * (1.0 - 0.77);
+      setVisibleCount(Math.max(3, Math.round(max * ratio)));
     };
     compute();
     let raf = 0;
@@ -99,8 +122,8 @@ const FloatingPellets = () => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 overflow-hidden"
-      style={{ zIndex: 0 }}
+      className="pointer-events-none fixed inset-0"
+      style={{ zIndex: 1, overflow: "hidden" }}
     >
       {pellets.map((p, i) => {
         const isVisible = i < visibleCount;
@@ -110,49 +133,48 @@ const FloatingPellets = () => {
             className="absolute block"
             style={{
               left: `${p.leftPct}%`,
-              top: `${p.topPct}%`,
-              width: `${p.size}px`,
-              height: `${Math.round(p.size * 0.42)}px`,
-              borderRadius: "9999px",
-              background:
-                "linear-gradient(135deg, #a8771f 0%, #8B6914 45%, #5d4509 100%)",
+              top: "-80px",
+              width: `${p.width}px`,
+              height: `${p.height}px`,
+              borderRadius: "4px",
+              background: `linear-gradient(90deg, ${p.colorDark} 0%, ${p.color} 50%, ${p.colorDark} 100%)`,
               boxShadow:
-                "inset 0 1px 1px rgba(255,220,160,0.35), inset 0 -1px 2px rgba(0,0,0,0.35)",
-              transform: `rotate(${p.rotate}deg)`,
+                "0 2px 4px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,220,170,0.25), inset 0 -1px 2px rgba(0,0,0,0.3)",
               opacity: isVisible ? p.opacity : 0,
-              transition: "opacity 1.2s ease-out",
+              transition: "opacity 1s ease-out",
               willChange: "transform, opacity",
-              animation: `pellet-drift-${p.id % 6} ${p.duration}s linear ${p.delay}s infinite`,
+              transform: `rotate(${p.rotate}deg)`,
+              animation: `pellet-fall-${p.swayVariant} ${p.duration}s linear ${p.delay}s infinite`,
             }}
           />
         );
       })}
 
-      {/* Drift keyframes — 6 variants so movement feels organic */}
       <style>{`
-        @keyframes pellet-drift-0 {
-          0%   { transform: translate(0,0) rotate(0deg); }
-          100% { transform: translate(20px,-120px) rotate(40deg); }
+        @keyframes pellet-fall-0 {
+          0%   { transform: translate(0, 0) rotate(0deg); }
+          25%  { transform: translate(20px, 25vh) rotate(15deg); }
+          50%  { transform: translate(-10px, 50vh) rotate(-10deg); }
+          75%  { transform: translate(15px, 75vh) rotate(20deg); }
+          100% { transform: translate(0, calc(100vh + 120px)) rotate(0deg); }
         }
-        @keyframes pellet-drift-1 {
-          0%   { transform: translate(0,0) rotate(0deg); }
-          100% { transform: translate(-30px,-140px) rotate(-50deg); }
+        @keyframes pellet-fall-1 {
+          0%   { transform: translate(0, 0) rotate(0deg); }
+          25%  { transform: translate(-30px, 25vh) rotate(-20deg); }
+          50%  { transform: translate(20px, 50vh) rotate(15deg); }
+          75%  { transform: translate(-25px, 75vh) rotate(-15deg); }
+          100% { transform: translate(0, calc(100vh + 120px)) rotate(10deg); }
         }
-        @keyframes pellet-drift-2 {
-          0%   { transform: translate(0,0) rotate(0deg); }
-          100% { transform: translate(40px,-160px) rotate(60deg); }
+        @keyframes pellet-fall-2 {
+          0%   { transform: translate(0, 0) rotate(0deg); }
+          50%  { transform: translate(35px, 50vh) rotate(25deg); }
+          100% { transform: translate(-20px, calc(100vh + 120px)) rotate(-15deg); }
         }
-        @keyframes pellet-drift-3 {
-          0%   { transform: translate(0,0) rotate(0deg); }
-          100% { transform: translate(-20px,-100px) rotate(-30deg); }
-        }
-        @keyframes pellet-drift-4 {
-          0%   { transform: translate(0,0) rotate(0deg); }
-          100% { transform: translate(10px,-180px) rotate(20deg); }
-        }
-        @keyframes pellet-drift-5 {
-          0%   { transform: translate(0,0) rotate(0deg); }
-          100% { transform: translate(-40px,-130px) rotate(-60deg); }
+        @keyframes pellet-fall-3 {
+          0%   { transform: translate(0, 0) rotate(0deg); }
+          33%  { transform: translate(-40px, 33vh) rotate(-25deg); }
+          66%  { transform: translate(30px, 66vh) rotate(20deg); }
+          100% { transform: translate(-15px, calc(100vh + 120px)) rotate(-10deg); }
         }
       `}</style>
     </div>
