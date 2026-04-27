@@ -1,6 +1,6 @@
 import { Truck, Link, BarChart3, Shield } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeLeft, fadeRight, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
+import { fadeLeft, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
 
 const features = [
   {
@@ -63,8 +63,8 @@ const AboutSection = () => {
               variants={cardItem}
               whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
               className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-colors hover:shadow-lg group"
-              style={{ ...(false && fadeRight) }}
             >
+
               <div className="w-12 h-12 rounded-xl bg-eco-light flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <f.icon className="h-6 w-6 text-primary" />
               </div>
