@@ -1,6 +1,7 @@
 import { Factory, UtensilsCrossed, Shirt, Blocks, Droplets, Wheat } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
+import { fadeUp, staggerContainer, slideFromLeft, slideFromRight, slideFromBottom, viewportOnce } from "@/lib/motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const industries = [
   { icon: Factory, name: "Industrial Boilers", desc: "Steam & hot water generation for manufacturing" },
@@ -12,6 +13,8 @@ const industries = [
 ];
 
 const IndustriesSection = () => {
+  const isMobile = useIsMobile();
+
   return (
     <section id="industries" className="py-20 md:py-28 bg-muted overflow-hidden">
       <div className="container mx-auto px-4">
@@ -37,22 +40,29 @@ const IndustriesSection = () => {
           viewport={viewportOnce}
           variants={staggerContainer}
         >
-          {industries.map((ind) => (
-            <motion.div
-              key={ind.name}
-              variants={cardItem}
-              whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
-              className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-colors text-center group"
-            >
-              <div className="w-16 h-16 rounded-2xl bg-eco-light mx-auto flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <ind.icon className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-card-foreground">
-                {ind.name}
-              </h3>
-              <p className="text-muted-foreground text-sm mt-2">{ind.desc}</p>
-            </motion.div>
-          ))}
+          {industries.map((ind, i) => {
+            const variant = isMobile
+              ? slideFromBottom
+              : i % 2 === 0
+              ? slideFromLeft
+              : slideFromRight;
+            return (
+              <motion.div
+                key={ind.name}
+                variants={variant}
+                whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
+                className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-colors text-center group"
+              >
+                <div className="w-16 h-16 rounded-2xl bg-eco-light mx-auto flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                  <ind.icon className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="font-display text-lg font-bold text-card-foreground">
+                  {ind.name}
+                </h3>
+                <p className="text-muted-foreground text-sm mt-2">{ind.desc}</p>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import { Flame, TrendingDown, Leaf, Truck } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
+import { fadeUp, staggerContainer, solutionCard, cornerShape, viewportOnce } from "@/lib/motion";
 
 const solutions = [
   {
@@ -58,11 +58,15 @@ const SolutionsSection = () => {
           {solutions.map((s) => (
             <motion.div
               key={s.title}
-              variants={cardItem}
+              variants={solutionCard}
               whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
               className="relative bg-card rounded-2xl p-8 border border-border hover:border-primary/40 transition-colors overflow-hidden group"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full group-hover:bg-primary/10 transition-colors" />
+              <motion.div
+                variants={cornerShape}
+                style={{ originX: 1, originY: 0 }}
+                className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full group-hover:bg-primary/10 transition-colors"
+              />
               <div className="relative">
                 <div className="w-14 h-14 rounded-2xl gradient-eco flex items-center justify-center mb-5">
                   <s.icon className="h-7 w-7 text-primary-foreground" />

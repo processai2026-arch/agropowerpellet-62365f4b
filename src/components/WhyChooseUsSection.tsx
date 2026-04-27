@@ -1,6 +1,6 @@
 import { Shield, TrendingDown, Leaf, Network, Clock, Award } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
+import { fadeUp, blurFocus, blurFocusContainer, viewportOnce } from "@/lib/motion";
 
 const reasons = [
   { icon: Shield, title: "Reliable Supply", desc: "Guaranteed year-round availability with buffer stocks and multi-source procurement." },
@@ -35,12 +35,12 @@ const WhyChooseUsSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          variants={staggerContainer}
+          variants={blurFocusContainer}
         >
           {reasons.map((r) => (
             <motion.div
               key={r.title}
-              variants={cardItem}
+              variants={blurFocus}
               whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
               className="flex gap-4 p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors"
             >

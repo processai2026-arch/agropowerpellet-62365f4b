@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import CountUp from "@/components/CountUp";
 import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
 
@@ -10,12 +11,28 @@ const stats = [
 ];
 
 const ImpactSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  // Subtle slow parallax: background drifts as user scrolls
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1.05, 1.1]);
+
   return (
-    <section id="impact" className="py-20 md:py-28 gradient-hero relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
+    <section
+      ref={sectionRef}
+      id="impact"
+      className="py-20 md:py-28 gradient-hero relative overflow-hidden"
+    >
+      <motion.div
+        style={{ y: bgY, scale: bgScale }}
+        className="absolute inset-0 opacity-10 will-change-transform"
+      >
         <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-primary blur-3xl" />
         <div className="absolute bottom-10 right-20 w-96 h-96 rounded-full bg-earth blur-3xl" />
-      </div>
+      </motion.div>
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -56,7 +73,7 @@ const ImpactSection = () => {
               }}
             >
               <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-gradient-eco mb-2">
-                <CountUp value={s.value} suffix={s.suffix} duration={2} />
+                <CountUp value={s.value} suffix={s.suffix} duration={2.5} />
               </div>
               <div className="font-semibold text-sm" style={{ color: 'hsl(0 0% 90%)' }}>
                 {s.label}
