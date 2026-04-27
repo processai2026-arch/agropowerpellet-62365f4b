@@ -1,6 +1,6 @@
 import { Flame, TrendingDown, Leaf, Truck } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeUp, staggerContainer, solutionCard, cornerShape, viewportOnce } from "@/lib/motion";
+import { fadeUp, staggerSlow, solutionCard, cornerShape, viewportOnce } from "@/lib/motion";
 
 const solutions = [
   {
@@ -53,7 +53,7 @@ const SolutionsSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          variants={staggerContainer}
+          variants={staggerSlow}
         >
           {solutions.map((s) => (
             <motion.div

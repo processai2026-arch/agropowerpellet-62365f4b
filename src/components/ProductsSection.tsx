@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { fadeUp, staggerContainer, parallaxCard, parallaxImage, viewportOnce } from "@/lib/motion";
+import { fadeUp, staggerFast, parallaxCard, parallaxImage, viewportOnce } from "@/lib/motion";
 import sawDust from "@/assets/products/saw-dust.jpg";
 import coffeeHusk from "@/assets/products/coffee-husk.jpg";
 import riceHusk from "@/assets/products/rice-husk.jpg";
@@ -50,7 +50,7 @@ const ProductsSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          variants={staggerContainer}
+          variants={staggerFast}
         >
           {products.map((p) => (
             <motion.div
@@ -67,7 +67,7 @@ const ProductsSection = () => {
                   loading="lazy"
                   width={1024}
                   height={1024}
-                  className="w-full h-full object-cover will-change-transform group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover will-change-transform group-hover:scale-[1.08] transition-transform duration-500 ease-out"
                 />
               </div>
               <div className="p-6">

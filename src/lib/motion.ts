@@ -4,7 +4,7 @@ import type { Variants } from "framer-motion";
 export const easeFluid = [0.16, 1, 0.3, 1] as const;
 export const easeSoft = [0.25, 0.1, 0.25, 1] as const;
 
-export const viewportOnce = { once: true, margin: "-15%" } as const;
+export const viewportOnce = { once: true, margin: "-10%" } as const;
 
 export const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -24,6 +24,16 @@ export const fadeRight: Variants = {
 export const staggerContainer: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
+
+export const staggerFast: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+};
+
+export const staggerSlow: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.15, delayChildren: 0.05 } },
 };
 
 export const cardItem: Variants = {
@@ -47,18 +57,23 @@ export const parallaxCard: Variants = {
 };
 
 export const parallaxImage: Variants = {
-  hidden: { scale: 1.15 },
-  show: { scale: 1, transition: { duration: 1.2, ease: easeFluid } },
+  hidden: { scale: 1.15, opacity: 0, y: 20 },
+  show: {
+    scale: 1,
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: easeSoft },
+  },
 };
 
 // 2. Blur-to-Focus cinematic reveal
 export const blurFocus: Variants = {
-  hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
+  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.95, ease: easeFluid },
+    transition: { duration: 0.8, ease: easeSoft },
   },
 };
 
@@ -67,22 +82,22 @@ export const blurFocusContainer: Variants = {
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
 };
 
-// 3. Solutions card slide up + corner shape expand
+// 3. Solutions card slide-from-left + corner shape subtle scale
 export const solutionCard: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, x: -30 },
   show: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: easeFluid },
+    x: 0,
+    transition: { duration: 0.75, ease: easeSoft },
   },
 };
 
 export const cornerShape: Variants = {
-  hidden: { scale: 0.4, opacity: 0 },
+  hidden: { scale: 0.8, opacity: 0 },
   show: {
     scale: 1,
     opacity: 1,
-    transition: { duration: 1, ease: easeFluid, delay: 0.25 },
+    transition: { duration: 0.85, ease: easeSoft, delay: 0.2 },
   },
 };
 
