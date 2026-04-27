@@ -1,4 +1,6 @@
 import { Flame, TrendingDown, Leaf, Truck } from "lucide-react";
+import { motion } from "framer-motion";
+import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
 
 const solutions = [
   {
@@ -29,22 +31,36 @@ const solutions = [
 
 const SolutionsSection = () => {
   return (
-    <section id="solutions" className="py-20 md:py-28 bg-background">
+    <section id="solutions" className="py-20 md:py-28 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeUp}
+        >
           <span className="text-sm font-semibold uppercase tracking-wider text-primary">
             Solutions
           </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mt-3 text-foreground">
             Reduce Costs. Increase Profitability.
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <motion.div
+          className="grid md:grid-cols-2 gap-6"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+        >
           {solutions.map((s) => (
-            <div
+            <motion.div
               key={s.title}
-              className="relative bg-card rounded-2xl p-8 border border-border hover:border-primary/40 transition-all overflow-hidden group"
+              variants={cardItem}
+              whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
+              className="relative bg-card rounded-2xl p-8 border border-border hover:border-primary/40 transition-colors overflow-hidden group"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full group-hover:bg-primary/10 transition-colors" />
               <div className="relative">
@@ -59,9 +75,9 @@ const SolutionsSection = () => {
                   {s.highlight}
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

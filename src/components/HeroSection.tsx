@@ -1,5 +1,6 @@
 import { ArrowRight, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CountUp from "@/components/CountUp";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
@@ -50,14 +51,14 @@ const HeroSection = () => {
 
         <div className="mt-10 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {[
-            { value: "500+", label: "Tons/Month Supplied" },
-            { value: "30%", label: "Avg. Cost Savings" },
-            { value: "50+", label: "Industry Clients" },
-            { value: "100%", label: "Sustainable Fuel" },
+            { value: 500, suffix: "+", label: "Tons/Month Supplied" },
+            { value: 30, suffix: "%", label: "Avg. Cost Savings" },
+            { value: 50, suffix: "+", label: "Industry Clients" },
+            { value: 100, suffix: "%", label: "Sustainable Fuel" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-gradient-eco">
-                {stat.value}
+                <CountUp value={stat.value} suffix={stat.suffix} duration={1.8} />
               </div>
               <div className="text-sm mt-1" style={{ color: 'hsl(0 0% 70%)' }}>
                 {stat.label}

@@ -1,4 +1,6 @@
 import { Wheat, Coffee, TreePine, Nut, Axe, Cylinder, Flame } from "lucide-react";
+import { motion } from "framer-motion";
+import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
 
 const products = [
   { icon: Axe, name: "Saw Dust", desc: "Fine wood particles ideal for boiler fuel and pellet manufacturing" },
@@ -14,9 +16,15 @@ const products = [
 
 const ProductsSection = () => {
   return (
-    <section id="products" className="py-20 md:py-28 bg-muted">
+    <section id="products" className="py-20 md:py-28 bg-muted overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeUp}
+        >
           <span className="text-sm font-semibold uppercase tracking-wider text-primary">
             Our Products
           </span>
@@ -27,13 +35,21 @@ const ProductsSection = () => {
             We source, aggregate, and supply a wide range of agro-residues and
             biomass fuels tailored to your industrial energy needs.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+        >
           {products.map((p) => (
-            <div
+            <motion.div
               key={p.name}
-              className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-all hover:shadow-lg group cursor-pointer"
+              variants={cardItem}
+              whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
+              className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-colors hover:shadow-lg group cursor-pointer"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl gradient-eco flex items-center justify-center flex-shrink-0">
@@ -46,9 +62,9 @@ const ProductsSection = () => {
                   <p className="text-muted-foreground text-sm mt-1">{p.desc}</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

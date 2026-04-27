@@ -1,8 +1,12 @@
+import { motion } from "framer-motion";
+import CountUp from "@/components/CountUp";
+import { fadeUp, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
+
 const stats = [
-  { value: "30%", label: "Average Fuel Cost Savings", sub: "for our industrial clients" },
-  { value: "5,000+", label: "Tons CO₂ Reduced", sub: "annually through biomass adoption" },
-  { value: "10,000+", label: "Tons Biomass Supplied", sub: "turning waste into valuable energy" },
-  { value: "100+", label: "Farmer Livelihoods", sub: "supported through agro-residue procurement" },
+  { value: 30, suffix: "%", label: "Average Fuel Cost Savings", sub: "for our industrial clients" },
+  { value: 5000, suffix: "+", label: "Tons CO₂ Reduced", sub: "annually through biomass adoption" },
+  { value: 10000, suffix: "+", label: "Tons Biomass Supplied", sub: "turning waste into valuable energy" },
+  { value: 100, suffix: "+", label: "Farmer Livelihoods", sub: "supported through agro-residue procurement" },
 ];
 
 const ImpactSection = () => {
@@ -14,7 +18,13 @@ const ImpactSection = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeUp}
+        >
           <span className="text-sm font-semibold uppercase tracking-wider text-primary" style={{ color: 'hsl(145 63% 55%)' }}>
             Our Impact
           </span>
@@ -25,12 +35,20 @@ const ImpactSection = () => {
             Every ton of agro-residue we trade prevents open burning, reduces
             carbon emissions, and creates value for farmers and industries alike.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+        >
           {stats.map((s) => (
-            <div
+            <motion.div
               key={s.label}
+              variants={cardItem}
+              whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
               className="text-center p-6 rounded-2xl border backdrop-blur-sm"
               style={{
                 borderColor: 'hsl(0 0% 100% / 0.1)',
@@ -38,7 +56,7 @@ const ImpactSection = () => {
               }}
             >
               <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-gradient-eco mb-2">
-                {s.value}
+                <CountUp value={s.value} suffix={s.suffix} duration={2} />
               </div>
               <div className="font-semibold text-sm" style={{ color: 'hsl(0 0% 90%)' }}>
                 {s.label}
@@ -46,9 +64,9 @@ const ImpactSection = () => {
               <div className="text-xs mt-1" style={{ color: 'hsl(0 0% 60%)' }}>
                 {s.sub}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

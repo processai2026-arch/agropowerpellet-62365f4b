@@ -1,4 +1,6 @@
 import { Truck, Link, BarChart3, Shield } from "lucide-react";
+import { motion } from "framer-motion";
+import { fadeLeft, staggerContainer, cardItem, viewportOnce } from "@/lib/motion";
 
 const features = [
   {
@@ -25,9 +27,15 @@ const features = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-20 md:py-28 bg-background">
+    <section id="about" className="py-20 md:py-28 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <motion.div
+          className="max-w-3xl mx-auto text-center mb-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeLeft}
+        >
           <span className="text-sm font-semibold uppercase tracking-wider text-primary">
             About Us
           </span>
@@ -40,14 +48,23 @@ const AboutSection = () => {
             industrial energy consumers with sustainable fuel sources, enabling
             cost savings, operational efficiency, and reduced carbon emissions.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+        >
           {features.map((f) => (
-            <div
+            <motion.div
               key={f.title}
-              className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-all hover:shadow-lg group"
+              variants={cardItem}
+              whileHover={{ scale: 1.02, transition: { duration: 0.25 } }}
+              className="bg-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-colors hover:shadow-lg group"
             >
+
               <div className="w-12 h-12 rounded-xl bg-eco-light flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <f.icon className="h-6 w-6 text-primary" />
               </div>
@@ -55,9 +72,9 @@ const AboutSection = () => {
                 {f.title}
               </h3>
               <p className="text-muted-foreground text-sm">{f.desc}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
