@@ -26,6 +26,16 @@ export const staggerContainer: Variants = {
   show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 
+export const staggerFast: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+};
+
+export const staggerSlow: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.15, delayChildren: 0.05 } },
+};
+
 export const cardItem: Variants = {
   hidden: { opacity: 0, y: 24, scale: 0.97 },
   show: {
@@ -58,13 +68,18 @@ export const parallaxImage: Variants = {
 
 // 2. Blur-to-Focus cinematic reveal
 export const blurFocus: Variants = {
-  hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
+  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.95, ease: easeFluid },
+    transition: { duration: 0.8, ease: easeSoft },
   },
+};
+
+export const blurFocusContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
 };
 
 export const blurFocusContainer: Variants = {
