@@ -39,10 +39,8 @@ const HeroSection = () => {
           </a>
           <a href="tel:+919940099060">
             <Button
-              variant="outline"
               size="lg"
-              className="gap-2 text-base px-8 py-6 rounded-xl border-primary/40 hover:bg-primary/10"
-              style={{ color: 'hsl(0 0% 95%)' }}
+              className="gap-2 text-base px-8 py-6 rounded-xl bg-background/10 backdrop-blur-sm border border-primary/40 text-white hover:bg-primary/20 hover:text-white"
             >
               <Phone className="h-5 w-5" /> <span className="hidden sm:inline">Call </span>+91 9940099060
             </Button>
