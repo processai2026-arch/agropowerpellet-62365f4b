@@ -148,15 +148,7 @@ const MultiplyingPellets = () => {
           style={{ scale: clusterScale }}
           className="relative w-[min(80vw,520px)] aspect-square pointer-events-auto"
         >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: hovered ? 4 : 8,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute inset-0"
-          >
+          <div className="absolute inset-0">
             {/* Center pellet — always visible */}
             <motion.img
               src={pellet}
