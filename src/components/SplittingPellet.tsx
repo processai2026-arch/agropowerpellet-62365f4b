@@ -170,7 +170,7 @@ const MultiplyingPellets = () => {
                 hovered={hovered}
               />
             ))}
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* First headline */}
